@@ -7,11 +7,7 @@ class ProductManager {
         return this.products.length + 1;
     }
     addProduct(title, description, price, thumbnail, code, stock) {
-        if (this.products.some(element => element.code === code)){
-            /*Con el some podemos ver si alguno de los elementos del array
-            tiene el mismo codigo que otro ya existente*/
-            console.log(`El producto ya existe`);
-        } else {
+        if (title && description && price && thumbnail && code && stock && this.validarCode(code)){
             let newProduct = {
                 title,
                 description,
@@ -22,8 +18,25 @@ class ProductManager {
                 id: this.getNewId()
             }
             this.products.push(newProduct) /*agregado de nuevo producto*/
+            console.log(`Producto agregado con èxito`);
+        } else {
+            console.log(`El producto ya existe`);
         }
     }
+
+    validarCode(code){
+        let resultado = true;
+        let codeFound = this.products.find(element => element.code == code)
+        /*Con el some podemos ver si alguno de los elementos del array
+        tiene el mismo codigo que otro ya existente*/
+        if(codeFound){
+            resultado = false;
+            console.log(`Codigo repetido`)
+        } else {
+            return resultado
+        }
+    }
+
     getProducts(){
         console.log(this.products);  
         /*Recordar poner console.log o relativos para que se muestre en consola*/
