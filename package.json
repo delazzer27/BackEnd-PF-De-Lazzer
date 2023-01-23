@@ -1,0 +1,26 @@
+{
+  "name": "curso-backend",
+  "version": "1.0.0",
+  "main": "productManager.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/delazzer27/BackEnd-PF-De-Lazzer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/delazzer27/BackEnd-PF-De-Lazzer/issues"
+  },
+  "homepage": "https://github.com/delazzer27/BackEnd-PF-De-Lazzer#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {},
+  "description": ""
+}

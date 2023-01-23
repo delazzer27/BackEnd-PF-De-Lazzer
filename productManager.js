@@ -7,31 +7,33 @@ class ProductManager {
         this.id = 1
     } 
 
-    async addProduct(title, description, price, thumbnail, code, stock) {
+    async addProduct({title, description, price, thumbnail, code, stock}) {
         try {
-            // if(!title || !description || !price || !thumbnail || !code || !stock){
-            //     console.log("Faltan completar campos");
-            //     return;
-            // }
+            if(!title || !description || !price || !thumbnail || !code || !stock){
+                throw new Error ("Faltan completar campos");
+            }
             let products = await this.getProducts();
             let validarCode = products.some(element => element.code == code)
-            if (validarCode) {
-                throw new Error ("Ya existe el producto");
-            } else { 
-                let newProduct = {
-                    title,
-                    description,
-                    price,
-                    thumbnail,
-                    code,
-                    stock,
-                    id: this.id
+            if (!products == []){
+                if (validarCode) {
+                    throw new Error ("Ya existe el producto");
+                } else { 
+                    let newProduct = {
+                        title,
+                        description,
+                        price,
+                        thumbnail,
+                        code,
+                        stock,
+                        id: this.id
+                    }
+                    products.push(newProduct) /*agregado de nuevo producto*/
+                    await fs.promises.writeFile(this.path, JSON.stringify(products));
+                    this.id++
+                    return console.log("successfully added");
                 }
-                products.push(newProduct) /*agregado de nuevo producto*/
-                await fs.promises.writeFile(this.path, JSON.stringify(products));
-                this.id++
-                return newProduct;
             }
+            
         } catch (error) {
             console.error(error);
         }
@@ -46,26 +48,31 @@ class ProductManager {
         }  
     }
     async getProductById (id){
-        let searchId = await this.getProducts();
-        let productId = await searchId.find (element => element.id === id)
-        if (productId) {
-            return productId; 
-        } else {
-            console.error(`Not found`);
+        try {
+            let searchId = await this.getProducts();
+            let productId = searchId.find (element => element.id === id)
+            if (productId) {
+                return productId; 
+            } else {
+                console.error(`Not found`);
+            }
+        } catch (error) {
+            console.error(error);
         }
+       
     }
 
-    async updateProduct (id) {
+    async updateProduct (id, { title, description, price, thumbnail, code, stock }) { //se pone entre llaves porque el metodo recibe como parametro un obj! 
         try {
-            let products = await this.getProduct()
-            let index = products.findIndex(product => product.id === id) //Busca el indice del array
+            let products = await this.getProduct();
+            let index = products.findIndex(product => product.id === id); //Busca el indice del array
             if (index === -1) {console.log("Not found")} 
             let existingProduct = products.some(product => product.code === code) //Chequea que el codigo exista
             if (existingProduct) {console.log(`El producto con el codigo ${code} ya fue agregado`)};
-            let productToUpdate = {title, description, price, thumbnail, code, stock}
+            let productToUpdate = {id, title, description, price, thumbnail, code, stock}
             products[index] = productToUpdate;
             await fs.promises.writeFile(this.path, JSON.stringify(products))
-            return productToUpdate
+            return console.log("successfully updated");
         } catch (error) {
             console.log(error);
         }
@@ -74,10 +81,11 @@ class ProductManager {
     async deleteProduct (id) {
         try {
             let products = await this.getProducts();
-            let productId = await products.find (element => element.id === id)
+            let productId = products.find (element => element.id === id)
             if (productId){
-                let newArray = products.splice(productId,1)
-                await fs.promises.writeFile(this.path, JSON.stringify(newArray))
+                products.splice(productId,1)
+                await fs.promises.writeFile(this.path, JSON.stringify(products))
+                return console.log("successfully deleted");
             }
         } catch (error) {
             console.log(error);
@@ -85,7 +93,15 @@ class ProductManager {
     }
 }
 
-const manager = new ProductManager("product.json")
+let manager = new ProductManager("product.json")
+// manager.addProduct(
+//   "producto prueba",
+//   "Este es un producto prueba",
+//   200,
+//   "Sin imagen",
+//   "abc126",
+//   25
+// );
 
 let product1 = {
     title : "Hamburguesa",
@@ -97,7 +113,7 @@ let product1 = {
 }
 let product2 = {
     title : "Papas fritas",
-    descripction : "al verdeo", 
+    description : "al verdeo", 
     price : 850,
     thumbnail : "image2",
     code : 145,
@@ -106,28 +122,28 @@ let product2 = {
 
 let product3 = {
     title : "Pizza",
-    descripction : "Napolitana", 
+    description : "Napolitana", 
     price : 1800,
     thumbnail : "image3",
     code : 36,
     stock : 89
 }
 
-let actualizar = {
-    title : "Rabas",
-    descripction : "con papas", 
-    price : 950,
-    thumbnail : "image4",
-    code : 36,
-    stock : 89
-}
-// manager.addProduct(product1)
+// let actualizar = {
+//     title : "Rabas",
+//     description : "con papas", 
+//     price : 950,
+//     thumbnail : "image4",
+//     code : 36,
+//     stock : 89
+// }
+manager.addProduct(product1)
 manager.addProduct(product2)
-// manager.addProduct(product3)
+manager.addProduct(product3)
 // console.log(manager.getProducts())
 // console.log(manager.getProductById(2))
 // manager.updateProduct(2,actualizar)
 // manager.deleteProduct(3)
 
-
+module.exports = ProductManager
 

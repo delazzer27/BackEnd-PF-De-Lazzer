@@ -1,1 +1,1 @@
-[{"title":{"title":"Papas fritas","descripction":"al verdeo","price":850,"thumbnail":"image2","code":145,"stock":36},"id":1}]
+[{"title":"Hamburguesa","description":"Vegana","price":2000,"thumbnail":"image","code":123,"stock":200,"id":1},{"title":"Papas fritas","description":"al verdeo","price":850,"thumbnail":"image2","code":145,"stock":36,"id":1},{"title":"Pizza","description":"Napolitana","price":1800,"thumbnail":"image3","code":36,"stock":89,"id":1}]
