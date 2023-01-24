@@ -1,7 +1,7 @@
 const express = require(`express`)
 const app = express();
 const ProductManager = require('../productManager')
-const manager = new ProductManager('../products.json')
+const manager = new ProductManager('../product.json')
 app.use(express.urlencoded({extended:true}))
 
 
@@ -11,7 +11,7 @@ app.get("/products", async (req, res) => {
     if (limit) {
         res.send(products.slice(0, limit))
     } else {
-        res.send(productos)
+        res.send(products)
     }
 })
 
